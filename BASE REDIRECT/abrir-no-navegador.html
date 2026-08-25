@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>Abra no navegador para continuar</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg-deep:#0b0710;
+    --bg-panel:#150f20;
+    --bg-panel-2:#1c1329;
+    --violet:#8b5cf6;
+    --violet-soft:rgba(139,92,246,.35);
+    --green:#2fe87a;
+    --green-glow:rgba(47,232,122,.55);
+    --text-primary:#f5f1fa;
+    --text-muted:#a99fc0;
+    --border:rgba(139,92,246,.22);
+  }
+
+  *{box-sizing:border-box; margin:0; padding:0;}
+
+  html,body{
+    min-height:100%;
+    background:
+      radial-gradient(circle at 50% -10%, rgba(139,92,246,.25), transparent 55%),
+      radial-gradient(circle at 15% 110%, rgba(47,232,122,.08), transparent 45%),
+      var(--bg-deep);
+    color:var(--text-primary);
+    font-family:'Inter', sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  body{
+    display:flex;
+    justify-content:center;
+    padding:40px 18px 56px;
+  }
+
+  .page{
+    width:100%;
+    max-width:430px;
+  }
+
+  header{
+    text-align:center;
+    margin-bottom:28px;
+  }
+
+  .eyebrow{
+    display:inline-flex;
+    align-items:center;
+    gap:7px;
+    font-size:12px;
+    letter-spacing:.14em;
+    color:var(--green);
+    background:rgba(47,232,122,.08);
+    border:1px solid rgba(47,232,122,.3);
+    padding:5px 12px;
+    border-radius:999px;
+    margin-bottom:18px;
+  }
+  .eyebrow .dot{
+    width:7px;height:7px;border-radius:50%;
+    background:var(--green);
+    box-shadow:0 0 0 0 var(--green-glow);
+    animation:livePulse 1.8s ease-out infinite;
+  }
+
+  h1{
+    font-family:'Cinzel', serif;
+    font-weight:700;
+    font-size:24px;
+    letter-spacing:.03em;
+    line-height:1.35;
+    background:linear-gradient(180deg,#fff, #cdb8f7 120%);
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+  }
+
+  .subtitle{
+    margin-top:10px;
+    font-size:15px;
+    color:var(--text-muted);
+    line-height:1.5;
+  }
+
+  /* ---- Signature element: animated browser-menu tutorial ---- */
+  .demo-frame{
+    position:relative;
+    margin:28px 0 30px;
+    border-radius:22px;
+    padding:1px;
+    background:linear-gradient(160deg, var(--violet-soft), transparent 60%);
+  }
+  .demo-inner{
+    background:linear-gradient(180deg, var(--bg-panel), var(--bg-panel-2));
+    border-radius:21px;
+    padding:18px 16px 22px;
+    overflow:hidden;
+    border:1px solid var(--border);
+  }
+  .demo-toolbar{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    background:#0f0a17;
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:9px 10px;
+    position:relative;
+  }
+  .demo-toolbar .url{
+    flex:1;
+    height:8px;
+    border-radius:4px;
+    background:rgba(245,241,250,.14);
+  }
+  .demo-dots{
+    position:relative;
+    width:26px;
+    height:26px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:8px;
+  }
+  .demo-dots svg{ width:18px; height:18px; }
+  .demo-dots circle{ fill:var(--text-muted); }
+
+  .tap-ring{
+    position:absolute;
+    inset:-6px;
+    border-radius:10px;
+    border:2px solid var(--violet);
+    opacity:0;
+    animation:tapRing 3.2s ease-in-out infinite;
+  }
+
+  .demo-menu{
+    margin-top:8px;
+    background:#0f0a17;
+    border:1px solid var(--border);
+    border-radius:10px;
+    overflow:hidden;
+    opacity:0;
+    transform:translateY(-6px);
+    animation:menuReveal 3.2s ease-in-out infinite;
+  }
+  .demo-menu .item{
+    font-size:12px;
+    padding:10px 12px;
+    color:var(--text-muted);
+    border-bottom:1px solid rgba(245,241,250,.06);
+  }
+  .demo-menu .item:last-child{ border-bottom:none; }
+  .demo-menu .item.highlight{
+    color:var(--text-primary);
+    background:rgba(139,92,246,.16);
+    font-weight:600;
+    position:relative;
+  }
+  .demo-menu .item.highlight::after{
+    content:"✓";
+    float:right;
+    color:var(--green);
+  }
+
+  @keyframes tapRing{
+    0%, 8%   {opacity:0; transform:scale(1);}
+    14%      {opacity:1; transform:scale(1);}
+    24%      {opacity:0; transform:scale(1.25);}
+    100%     {opacity:0;}
+  }
+  @keyframes menuReveal{
+    0%, 16%  {opacity:0; transform:translateY(-6px);}
+    26%, 78% {opacity:1; transform:translateY(0);}
+    92%,100% {opacity:0; transform:translateY(-6px);}
+  }
+
+  /* ---- Step cards ---- */
+  .steps{
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+    margin-bottom:26px;
+  }
+  .step{
+    display:flex;
+    align-items:flex-start;
+    gap:14px;
+    background:linear-gradient(180deg, var(--bg-panel), var(--bg-panel-2));
+    border:1px solid var(--border);
+    border-radius:16px;
+    padding:16px;
+  }
+  .step-num{
+    flex:none;
+    width:34px; height:34px;
+    border-radius:10px;
+    background:rgba(139,92,246,.16);
+    border:1px solid var(--border);
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Cinzel', serif;
+    font-size:14px;
+    color:var(--violet);
+  }
+  .step-title{ font-size:15px; font-weight:600; }
+  .step-sub{ font-size:13px; color:var(--text-muted); margin-top:3px; line-height:1.4; }
+
+  /* ---- Live status line ---- */
+  .live-status{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    font-size:14px;
+    font-weight:500;
+    color:var(--text-primary);
+    margin-bottom:22px;
+  }
+  .live-status .dot{
+    width:9px; height:9px; border-radius:50%;
+    background:var(--green);
+    box-shadow:0 0 0 0 var(--green-glow);
+    animation:livePulse 1.8s ease-out infinite;
+  }
+  @keyframes livePulse{
+    0%   { box-shadow:0 0 0 0 var(--green-glow); }
+    70%  { box-shadow:0 0 0 8px rgba(47,232,122,0); }
+    100% { box-shadow:0 0 0 0 rgba(47,232,122,0); }
+  }
+
+  /* ---- Actions ---- */
+  .actions{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+  }
+  .btn{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    width:100%;
+    border:none;
+    border-radius:12px;
+    padding:14px 16px;
+    font-family:'Inter', sans-serif;
+    font-size:15px;
+    font-weight:600;
+    cursor:pointer;
+    transition:transform .15s ease, opacity .15s ease;
+  }
+  .btn:active{ transform:scale(.98); }
+  .btn-primary{
+    background:linear-gradient(135deg, var(--violet), #6d3adf);
+    color:#fff;
+  }
+  .btn-secondary{
+    background:transparent;
+    color:var(--text-primary);
+    border:1px solid var(--border);
+  }
+  .btn:focus-visible{
+    outline:2px solid var(--green);
+    outline-offset:2px;
+  }
+
+  .link-box{
+    margin-top:12px;
+    font-size:12px;
+    color:var(--text-muted);
+    text-align:center;
+    word-break:break-all;
+    line-height:1.5;
+  }
+  .link-box span{ color:var(--text-primary); }
+
+  .copy-feedback{
+    text-align:center;
+    font-size:12px;
+    color:var(--green);
+    margin-top:8px;
+    min-height:16px;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .eyebrow .dot, .live-status .dot, .tap-ring, .demo-menu{ animation:none !important; }
+    .demo-menu{ opacity:1; transform:none; }
+  }
+</style>
+</head>
+<body>
+  <div class="page">
+    <header>
+      <span class="eyebrow"><span class="dot"></span>AO VIVO</span>
+      <h1>SIGA O TUTORIAL ABAIXO</h1>
+      <p class="subtitle">Abra essa página no navegador do seu celular para continuar</p>
+    </header>
+
+    <!-- Signature animated tutorial -->
+    <div class="demo-frame">
+      <div class="demo-inner">
+        <div class="demo-toolbar">
+          <div class="url"></div>
+          <div class="demo-dots">
+            <div class="tap-ring"></div>
+            <svg viewBox="0 0 24 24"><circle cx="5" cy="12" r="2.2"/><circle cx="12" cy="12" r="2.2"/><circle cx="19" cy="12" r="2.2"/></svg>
+          </div>
+        </div>
+        <div class="demo-menu">
+          <div class="item">Copiar link</div>
+          <div class="item highlight">Abrir no navegador</div>
+          <div class="item">Compartilhar</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div>
+          <div class="step-title">Toque nos 3 pontinhos</div>
+          <div class="step-sub">No canto superior da tela</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div>
+          <div class="step-title">Escolha abrir no navegador</div>
+          <div class="step-sub">Chrome, Safari ou navegador padrão</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div>
+          <div class="step-title">Pronto</div>
+          <div class="step-sub">O Telegram abre automaticamente</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="live-status"><span class="dot"></span><span id="statusText">Abra no navegador para continuar</span></div>
+
+    <div class="actions">
+      <button class="btn btn-primary" id="openBtn">Abrir no navegador</button>
+      <button class="btn btn-secondary" id="copyBtn">Copiar link</button>
+    </div>
+
+    <p class="link-box">Não conseguiu? Copie o link acima e cole no Google, Chrome ou no navegador que preferir:<br><span id="linkDisplay"></span></p>
+    <p class="copy-feedback" id="copyFeedback"></p>
+  </div>
+
+<script>
+  // ---- CONFIGURE AQUI: troque pela URL final (ex.: link do seu bot no Telegram) ----
+  const TARGET_URL = "https://google.com";
+
+  const linkDisplay = document.getElementById('linkDisplay');
+  const openBtn = document.getElementById('openBtn');
+  const copyBtn = document.getElementById('copyBtn');
+  const copyFeedback = document.getElementById('copyFeedback');
+  const statusText = document.getElementById('statusText');
+
+  linkDisplay.textContent = TARGET_URL;
+
+  function isInAppBrowser(){
+    const ua = navigator.userAgent || navigator.vendor || window.opera || "";
+    return /musical_ly|tiktok|bytedance|aweme|ttwebview|instagram|fbav|fban|line\/|micromessenger/i.test(ua);
+  }
+
+  function goToTarget(){
+    window.location.href = TARGET_URL;
+  }
+
+  openBtn.addEventListener('click', goToTarget);
+
+  copyBtn.addEventListener('click', async () => {
+    try {
+      await navigator.clipboard.writeText(TARGET_URL);
+      copyFeedback.textContent = "Link copiado! Cole no navegador para continuar.";
+    } catch (err) {
+      const temp = document.createElement('input');
+      temp.value = TARGET_URL;
+      document.body.appendChild(temp);
+      temp.select();
+      document.execCommand('copy');
+      document.body.removeChild(temp);
+      copyFeedback.textContent = "Link copiado! Cole no navegador para continuar.";
+    }
+  });
+
+  // Se o lead já estiver fora do TikTok, abrimos automaticamente
+  if (!isInAppBrowser()) {
+    statusText.textContent = "Você já está no navegador — abrindo automaticamente...";
+    setTimeout(goToTarget, 900);
+  }
+</script>
+</body>
+</html>
